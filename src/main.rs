@@ -1,5 +1,8 @@
 #![allow(unused_must_use)]
-use std::io::{BufRead, Cursor};
+
+use std::io::BufRead;
+#[cfg(test)]
+use std::io::Cursor;
 
 #[derive(Debug, PartialEq)]
 struct Puzzle {
@@ -10,7 +13,10 @@ struct Puzzle {
 
 
 fn main() {
-    println!("Hello, world!");
+    let mut puzzles = read_puzzles(&mut std::io::stdin().lock());
+    puzzles.iter_mut()
+        .map(|puzzle| println!("{}", solve_puzzle(puzzle)))
+        .count();
 }
 
 
