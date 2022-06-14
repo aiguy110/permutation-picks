@@ -107,9 +107,21 @@ fn solve_puzzle(puzzle: &mut Puzzle) -> u64 {
         .filter(|&&bound| !bound)
         .count();
 
-    // Final answer is (2^free_loop_count) % (10^9 + 7)
-    let two:u64 = 2;
-    two.pow(free_loop_count as u32) % 1_000_000_007
+    // Final answer is (2^free_loop_count) % (10^9 + 7), but need to be careful not to overflow.
+    let mut answer = 1;
+    for _ in 0..free_loop_count {
+        answer *= 2;
+        answer %= 1_000_000_007;
+    }
+    answer
+}
+
+#[test]
+fn test_long_input() {
+    let mut input = Cursor::new(include_str!("../long_input.txt"));
+    let mut puzzle = read_puzzle(&mut input);
+    assert_ne![solve_puzzle(&mut puzzle), 0];
+
 }
 
 #[test]
